@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#Bash script to send commands to one or multiple targets
+echo
+echo Welcome to the Command UZI.
+echo This tool allows command/s to be passed to target/s
+echo 
+read -p 'Target/s Username: ' username
+read -p 'Target/s Password: ' password
+read -p 'First three octets format X.X.X.: ' threeoctets
+read -p 'Fourth octet range beginning: ' forthfrom
+read -p 'Fourth octet range ending: ' forthto
+printf 'Enter the command/s to send. \nExample: show clock ; show system uptime ; ...\nSeperate cmds with semi colon. \n'
+read -p 'Enter the command/s to send: ' usercommands
+echo " $usercommands ; exit " 
+
+#for i in $($threeoctets{$forthfrom..$forthto})
+for i in $(seq $forthfrom $forthto)
+	do
+		echo -e "---------------------------------[START $threeoctets$i]---------------------------------" && timeout 10s sshpass -p "$password" ssh -o "UserKnownHostsFile=/dev/null" -o "UpdateHostKeys=yes" -o "StrictHostKeyChecking=no" $username@$threeoctets$i "$usercommands" || true && echo -e "\n\n----------------------------------[END $threeoctets$i]----------------------------------\n\n"
+done
