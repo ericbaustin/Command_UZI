@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# trap ctrl-c and call ctrl_c() to kill forked functions
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
+
 #Bash script to send commands to one or multiple targets
 echo
 echo Welcome to the Command UZI.
